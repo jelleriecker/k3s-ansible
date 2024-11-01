@@ -1,5 +1,20 @@
 ---
+- name: apt update and apt upgrade
+  hosts: all
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
 
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist
+        autoremove: yes
+        autoclean: yes
+        force_apt_get: yes
+        dpkg_options: 'force-confdef,force-confold'
+        
 # Servers should be restarted sequientally to avoid etcd learner issues
 # Agents have no such limitation
 - name: Upgrade K3s Servers
@@ -14,3 +29,4 @@
   become: true
   roles:
     - role: k3s_upgrade
+
